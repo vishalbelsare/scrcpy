@@ -2,6 +2,23 @@
 
 ## Install
 
+### From the official release
+
+Download a static build of the [latest release]:
+
+ - [`scrcpy-linux-x86_64-v3.0.2.tar.gz`][direct-linux-x86_64] (x86_64)  
+   <sub>SHA-256: `20b69dcd379bb7d7208bf1e4858cf04162fc856697be0e6c03863d7b3c1e734a`</sub>
+
+[latest release]: https://github.com/Genymobile/scrcpy/releases/latest
+[direct-linux-x86_64]: https://github.com/Genymobile/scrcpy/releases/download/v3.0.2/scrcpy-linux-x86_64-v3.0.2.tar.gz
+
+and extract it.
+
+_Static builds of scrcpy for Linux are still experimental._
+
+
+### From your package manager
+
 <a href="https://repology.org/project/scrcpy/versions"><img src="https://repology.org/badge/vertical-allrepos/scrcpy.svg" alt="Packaging status" align="right"></a>
 
 Scrcpy is packaged in several distributions and package managers:
@@ -13,10 +30,10 @@ Scrcpy is packaged in several distributions and package managers:
  - Snap: `snap install scrcpy`
  - … (see [repology](https://repology.org/project/scrcpy/versions))
 
-### Latest version
 
-However, the packaged version is not always the latest release. To install the
-latest release from `master`, follow this simplified process.
+### From an install script
+
+To install the latest release from `master`, follow this simplified process.
 
 First, you need to install the required packages:
 
