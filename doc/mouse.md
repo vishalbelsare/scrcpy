@@ -34,9 +34,9 @@ Two modes allow to simulate a physical HID mouse on the device.
 In these modes, the computer mouse is "captured": the mouse pointer disappears
 from the computer and appears on the Android device instead.
 
-Special capture keys, either <kbd>Alt</kbd> or <kbd>Super</kbd>, toggle
-(disable or enable) the mouse capture. Use one of them to give the control of
-the mouse back to the computer.
+The [shortcut mod](shortcuts.md) (either <kbd>Alt</kbd> or <kbd>Super</kbd> by
+default) toggle (disable or enable) the mouse capture. Use one of them to give
+the control of the mouse back to the computer.
 
 
 ### UHID
@@ -83,9 +83,9 @@ process like the _adb daemon_).
 ## Mouse bindings
 
 By default, with SDK mouse:
- - right-click triggers BACK (or POWER on)
- - middle-click triggers HOME
- - the 4th click triggers APP_SWITCH
+ - right-click triggers `BACK` (or `POWER` on)
+ - middle-click triggers `HOME`
+ - the 4th click triggers `APP_SWITCH`
  - the 5th click expands the notification panel
 
 The secondary clicks may be forwarded to the device instead by pressing the
@@ -121,9 +121,9 @@ Each character must be one of the following:
 
  - `+`: forward the click to the device
  - `-`: ignore the click
- - `b`: trigger shortcut BACK (or turn screen on if off)
- - `h`: trigger shortcut HOME
- - `s`: trigger shortcut APP_SWITCH
+ - `b`: trigger shortcut `BACK` (or turn screen on if off)
+ - `h`: trigger shortcut `HOME`
+ - `s`: trigger shortcut `APP_SWITCH`
  - `n`: trigger shortcut "expand notification panel"
 
 For example:

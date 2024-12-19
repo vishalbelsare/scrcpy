@@ -1,7 +1,5 @@
 package com.genymobile.scrcpy.control;
 
-import com.genymobile.scrcpy.device.Device;
-
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import org.junit.Assert;
@@ -285,19 +283,19 @@ public class ControlMessageReaderTest {
     }
 
     @Test
-    public void testParseSetScreenPowerMode() throws IOException {
+    public void testParseSetDisplayPower() throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         DataOutputStream dos = new DataOutputStream(bos);
-        dos.writeByte(ControlMessage.TYPE_SET_SCREEN_POWER_MODE);
-        dos.writeByte(Device.POWER_MODE_NORMAL);
+        dos.writeByte(ControlMessage.TYPE_SET_DISPLAY_POWER);
+        dos.writeBoolean(true);
         byte[] packet = bos.toByteArray();
 
         ByteArrayInputStream bis = new ByteArrayInputStream(packet);
         ControlMessageReader reader = new ControlMessageReader(bis);
 
         ControlMessage event = reader.read();
-        Assert.assertEquals(ControlMessage.TYPE_SET_SCREEN_POWER_MODE, event.getType());
-        Assert.assertEquals(Device.POWER_MODE_NORMAL, event.getAction());
+        Assert.assertEquals(ControlMessage.TYPE_SET_DISPLAY_POWER, event.getType());
+        Assert.assertTrue(event.getOn());
 
         Assert.assertEquals(-1, bis.read()); // EOS
     }
@@ -324,6 +322,8 @@ public class ControlMessageReaderTest {
         DataOutputStream dos = new DataOutputStream(bos);
         dos.writeByte(ControlMessage.TYPE_UHID_CREATE);
         dos.writeShort(42); // id
+        dos.writeShort(0x1234); // vendorId
+        dos.writeShort(0x5678); // productId
         dos.writeByte(3); // name size
         dos.write("ABC".getBytes(StandardCharsets.US_ASCII));
         byte[] data = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
@@ -337,6 +337,8 @@ public class ControlMessageReaderTest {
         ControlMessage event = reader.read();
         Assert.assertEquals(ControlMessage.TYPE_UHID_CREATE, event.getType());
         Assert.assertEquals(42, event.getId());
+        Assert.assertEquals(0x1234, event.getVendorId());
+        Assert.assertEquals(0x5678, event.getProductId());
         Assert.assertEquals("ABC", event.getText());
         Assert.assertArrayEquals(data, event.getData());
 
@@ -395,6 +397,27 @@ public class ControlMessageReaderTest {
 
         ControlMessage event = reader.read();
         Assert.assertEquals(ControlMessage.TYPE_OPEN_HARD_KEYBOARD_SETTINGS, event.getType());
+
+        Assert.assertEquals(-1, bis.read()); // EOS
+    }
+
+    @Test
+    public void testParseStartApp() throws IOException {
+        byte[] name = "firefox".getBytes(StandardCharsets.UTF_8);
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        DataOutputStream dos = new DataOutputStream(bos);
+        dos.writeByte(ControlMessage.TYPE_START_APP);
+        dos.writeByte(name.length);
+        dos.write(name);
+        byte[] packet = bos.toByteArray();
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(packet);
+        ControlMessageReader reader = new ControlMessageReader(bis);
+
+        ControlMessage event = reader.read();
+        Assert.assertEquals(ControlMessage.TYPE_START_APP, event.getType());
+        Assert.assertEquals("firefox", event.getText());
 
         Assert.assertEquals(-1, bis.read()); // EOS
     }

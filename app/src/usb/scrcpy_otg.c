@@ -95,9 +95,14 @@ scrcpy_otg(struct scrcpy_options *options) {
     // On Windows, only one process could open a USB device
     // <https://github.com/Genymobile/scrcpy/issues/2773>
     LOGI("Killing adb server (if any)...");
-    unsigned flags = SC_ADB_NO_STDOUT | SC_ADB_NO_STDERR | SC_ADB_NO_LOGERR;
-    // uninterruptible (intr == NULL), but in practice it's very quick
-    sc_adb_kill_server(NULL, flags);
+    if (sc_adb_init()) {
+        unsigned flags = SC_ADB_NO_STDOUT | SC_ADB_NO_STDERR | SC_ADB_NO_LOGERR;
+        // uninterruptible (intr == NULL), but in practice it's very quick
+        sc_adb_kill_server(NULL, flags);
+        sc_adb_destroy();
+    } else {
+        LOGW("Could not call adb executable, adb server not killed");
+    }
 #endif
 
     static const struct sc_usb_callbacks cbs = {
@@ -185,6 +190,7 @@ scrcpy_otg(struct scrcpy_options *options) {
         .window_width = options->window_width,
         .window_height = options->window_height,
         .window_borderless = options->window_borderless,
+        .shortcut_mods = options->shortcut_mods,
     };
 
     ok = sc_screen_otg_init(&s->screen_otg, &params);
